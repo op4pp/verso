@@ -98,7 +98,7 @@
         <button type="button" onclick="calculatePrice()">Arvuta</button>
     </form>
 
-	<div id='error-message'>Kalkulaator töötab küll...<br>kuid palun sisesta vähemalt läbitud distants (ja kütusekulu) ning <b>kasuta koma asemel punkti!</b></div>
+	<div id='error-message'>Kalkulaator töötab küll...<br>kuid palun sisesta vähemalt läbitud distants (ja kütusekulu) ning <b>kasuta koma asemel punkti!</b> Samuti veendu, et poleks üleliigseid tühikuid!</div>
     <div id='result'></div>
 	<div id='infotext'><p><i>Kui kütuse täpne maksumus ja kütuse jääk paagis ei huvita, siis jäta need väljad lihtsalt tühjaks ning kalkulatsioon tehakse lahtrites hallilt kuvatud sisenditega.</i></p></div>
 </div>
@@ -124,7 +124,9 @@
 
         var litresSpent = (kilometers / 100) * fuelConsumption;
 		var price = litresSpent * fuelPrice;
-		document.getElementById('result').innerHTML = 'Kütust kulus <b>' + kilometers.toFixed(2) + ' kilomeetri</b> peale hinnanguliselt <b>' + litresSpent.toFixed(2) + ' liitrit</b>,<br>mille maksumus on <b>' + price.toFixed(2) + '€</b>.<br>Kui paagis oli enne <b>' + litres.toFixed(2) + ' liitrit</b> kütust,<br>siis on nüüd alles <b>' + (litres - litresSpent).toFixed(2) + ' liitrit</b>.';
+		var fuelLeft = litres - litresSpent;
+		var kilometersLeft = fuelLeft / fuelConsumption * 100;
+		document.getElementById('result').innerHTML = 'Kütust kulus <b>' + kilometers.toFixed(2) + ' kilomeetri</b> läbimiseks hinnanguliselt <b>' + litresSpent.toFixed(2) + ' liitrit</b>,<br>mille maksumus on <b>' + price.toFixed(2) + '€</b>.<br>Kui paagis oli enne <b>' + litres.toFixed(2) + ' liitrit</b> kütust,<br>siis on nüüd alles <b>' + fuelLeft.toFixed(2) + ' liitrit</b>, millega saab veel sõita <b>' + kilometersLeft.toFixed(2) + ' kilomeetrit</b> <i>(' + fuelConsumption.toFixed(1) + 'l/100km korral)</i>.';
 		document.getElementById('infotext').style.display = 'none';
     }
 </script>
