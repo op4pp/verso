@@ -69,6 +69,12 @@
             line-height: 1.5;
 			display: block;
         }
+		
+        #comma-message {
+            color: red;
+            display: none;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -93,20 +99,36 @@
     </form>
 
     <div id='result'></div>
-	<div id='infotext'><p><i>Kui kütuse täpne maksumus ja kütuse jääk paagis ei huvita, siis jäta need väljad lihtsalt tühjaks ning kalkulatsioon tehakse lahtrites hallilt kuvatud sisenditega.</i></p></div>
+	<div id='comma-message'>Kalkulaator töötab küll...<br>kuid palun sisesta arv ning kasuta koma asemel punkti!</div>
+	<div id='infotext'><p><i>Kui kütuse täpne maksumus ja kütuse jääk paagis ei huvita, siis jäta need väljad lihtsalt tühjaks ning kalkulatsioon tehakse lahtrites hallilt näidatud sisenditega.</i></p></div>
 </div>
 
 <script>
     function calculatePrice() {
-        var kilometers = parseFloat(document.getElementById("kilometers").value) || 0;
-        var fuelPrice = parseFloat(document.getElementById("fuelPrice").value) || 1.6;
-        var fuelConsumption = parseFloat(document.getElementById("fuelConsumption").value) || 6.6;
-        var litres = parseFloat(document.getElementById("litres").value) || 55;
+        var kilometers = parseInputValue("kilometers");
+        var fuelPrice = parseInputValue("fuelPrice") || 1.6;
+        var fuelConsumption = parseInputValue("fuelConsumption") || 6.6;
+        var litres = parseInputValue("litres") || 55;
+
+        if (isNaN(kilometers) || isNaN(fuelPrice) || isNaN(fuelConsumption) || isNaN(litres)) {
+            document.getElementById('comma-message').style.display = 'block';
+			document.getElementById('infotext').style.display = 'none'
+            return;
+        } else {
+            document.getElementById('comma-message').style.display = 'none';
+			document.getElementById('infotext').style.display = 'block'
+        }
 
         var litresSpent = (kilometers / 100) * fuelConsumption;
 		var price = litresSpent * fuelPrice;
 		document.getElementById('result').innerHTML = 'Kütust kulus <b>' + kilometers.toFixed(2) + ' kilomeetri</b> peale hinnanguliselt <b>' + litresSpent.toFixed(2) + ' liitrit</b>,<br>mille maksumus on <b>' + price.toFixed(2) + '€</b>.<br>Kui paagis oli enne <b>' + litres.toFixed(2) + ' liitrit</b> kütust,<br>siis on nüüd alles <b>' + (litres - litresSpent).toFixed(2) + ' liitrit</b>.';
 		document.getElementById('infotext').style.display = 'none';
+    }
+	
+    function parseInputValue(id) {
+        var rawValue = document.getElementById(id).value;
+        var cleanedValue = rawValue.replace(',', '.');
+        return parseFloat(cleanedValue);
     }
 </script>
 
