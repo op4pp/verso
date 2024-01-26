@@ -84,16 +84,16 @@
 	<p><b>NB!</b> Koma asemel kasuta punkti!</p>
     <form id="fuelForm">
         <label for="kilometers">Läbitud distans (km):</label>
-        <input type="number" id="kilometers" placeholder="Sisesta läbitud km">
+        <input type="number" id="kilometers" placeholder="Sisesta läbitud km (vajalik kindlasti sisestada!)">
 
         <label for="fuelConsumption">Kütusekulu (l/100km):</label>
-        <input type="number" id="fuelConsumption" placeholder="Keskmiselt 6.6l/100km">
+        <input type="number" id="fuelConsumption" placeholder="Sisendita automaatselt 6.6l/100km (keskmine)">
 
         <label for="fuelPrice">Kütusehind (€):</label>
         <input type="number" id="fuelPrice" placeholder="Sisesta kütusehind (1.6€/l sisendita)">
 		
 		<label for="litres">Paaki pandud kütus (l):</label>
-        <input type="number" id="litres" placeholder="Täispaak: 55l">
+        <input type="number" id="litres" placeholder="Sisendita automaatselt 55l (täispaak)">
 
         <button type="button" onclick="calculatePrice()">Arvuta</button>
     </form>
@@ -127,7 +127,7 @@
 		var fuelLeft = litres - litresSpent;
 		var kilometersLeft = fuelLeft / fuelConsumption * 100;
 		var tahtvereCalculation = kilometersLeft / 12;
-		document.getElementById('result').innerHTML = 'Kütust kulus <b>' + kilometers.toFixed(2) + ' kilomeetri</b> läbimiseks hinnanguliselt <b>' + litresSpent.toFixed(2) + ' liitrit</b>,<br>mille maksumus on <b>' + price.toFixed(2) + '€</b>.<br>Kui paagis oli enne <b>' + litres.toFixed(2) + ' liitrit</b> kütust,<br>siis on nüüd alles <b>' + fuelLeft.toFixed(2) + ' liitrit</b>, millega saab veel sõita <b>' + kilometersLeft.toFixed(2) + ' kilomeetrit</b> <i>(' + fuelConsumption.toFixed(1) + 'l/100km korral)</i>. <i>Tähtvere spordiparki saab selle kütusega edasi-tagasi sõita veel <b>' + tahtvereCalculation.toFixed(0) + '</b> korda.</i>';
+		document.getElementById('result').innerHTML = 'Kütust kulus <b>' + kilometers.toFixed(2) + ' kilomeetri</b> läbimiseks hinnanguliselt <b>' + litresSpent.toFixed(2) + ' liitrit</b>,<br>mille maksumus on <b>' + price.toFixed(2) + '€</b>.<br>Kui paagis oli enne <b>' + litres.toFixed(2) + ' liitrit</b> kütust,<br>siis on nüüd alles <b>' + fuelLeft.toFixed(2) + ' liitrit</b>,<br>millega saab veel sõita <b>' + kilometersLeft.toFixed(2) + ' kilomeetrit</b> <i>(' + fuelConsumption.toFixed(1) + 'l/100km korral)</i>.<br><i>Tähtvere spordiparki saab selle kütusega edasi-tagasi sõita veel <b>' + tahtvereCalculation.toFixed(0) + '</b> korda.</i>';
 		document.getElementById('infotext').style.display = 'none';
     }
 </script>
