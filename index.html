@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toyota Verso kütusekalkulaator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('versopilt.png');
+			background-size: 50%;
+			background-position: center;
+			margin: 0;
+			padding: 0;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+		}
+
+        #calculator {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        button:active {
+            background-color: #367939;
+        }
+
+        #result {
+            margin-top: 20px;
+            line-height: 1.5;
+			font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="calculator">
+    <h2>Verso kütusekalkulaator</h2>
+	<p><b>NB!</b> Koma asemel kasuta punkti!</p>
+    <form id="fuelForm">
+        <label for="kilometers">Läbitud distans (km):</label>
+        <input type="number" id="kilometers" placeholder="Sisesta läbitud km">
+
+        <label for="fuelPrice">Kütusehind (€):</label>
+        <input type="number" id="fuelPrice" placeholder="Sisesta kütusehind">
+
+        <label for="fuelConsumption">Kütusekulu (l/100km):</label>
+        <input type="number" id="fuelConsumption" placeholder="Keskmiselt 6.6l/100km">
+		
+		<label for="litres">Paaki pandud kütus (l):</label>
+        <input type="number" id="litres" placeholder="Täispaak: 55l">
+
+        <button type="button" onclick="calculatePrice()">Arvuta</button>
+    </form>
+
+    <div id='result'></div>
+</div>
+
+<script>
+    function calculatePrice() {
+        var kilometers = parseFloat(document.getElementById("kilometers").value) || 0;
+        var fuelPrice = parseFloat(document.getElementById("fuelPrice").value) || 1.6;
+        var fuelConsumption = parseFloat(document.getElementById("fuelConsumption").value) || 6.6;
+        var litres = parseFloat(document.getElementById("litres").value) || 55;
+
+        var litresSpent = (kilometers / 100) * fuelConsumption;
+		var price = litresSpent * fuelPrice;
+		document.getElementById('result').innerHTML = 'Kütust kulus <b>' + kilometers.toFixed(2) + ' kilomeetri</b> peale hinnanguliselt <b>' + litresSpent.toFixed(2) + ' liitrit</b>,<br>mille väärtus on <b>' + price.toFixed(2) + '€</b>.<br>Kui paagis oli enne <b>' + litres.toFixed(2) + ' liitrit</b> kütust,<br>siis on nüüd alles <b>' + (litres - litresSpent).toFixed(2) + ' liitrit</b>.';
+    }
+</script>
+
+</body>
+</html>
