@@ -126,7 +126,7 @@
 		var price = litresSpent * fuelPrice;
 		var fuelLeft = litres - litresSpent;
 		var kilometersLeft = fuelLeft / fuelConsumption * 100;
-		var tahtvereCalculation = kilometersLeft / 6;
+		var tahtvereCalculation = kilometersLeft / 12;
 		document.getElementById('result').innerHTML = 'Kütust kulus <b>' + kilometers.toFixed(2) + ' kilomeetri</b> läbimiseks hinnanguliselt <b>' + litresSpent.toFixed(2) + ' liitrit</b>,<br>mille maksumus on <b>' + price.toFixed(2) + '€</b>.<br>Kui paagis oli enne <b>' + litres.toFixed(2) + ' liitrit</b> kütust,<br>siis on nüüd alles <b>' + fuelLeft.toFixed(2) + ' liitrit</b>, millega saab veel sõita <b>' + kilometersLeft.toFixed(2) + ' kilomeetrit</b> <i>(' + fuelConsumption.toFixed(1) + 'l/100km korral)</i>. <i>Tähtvere spordiparki saab selle kütusega edasi-tagasi sõita veel <b>' + tahtvereCalculation.toFixed(0) + '</b> korda.</i>';
 		document.getElementById('infotext').style.display = 'none';
     }
