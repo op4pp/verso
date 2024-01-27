@@ -9,15 +9,15 @@
         body {
             font-family: 'Arial', sans-serif;
             background-image: url('versopilt.webp');
-			background-size: 50%;
-			background-position: center;
-			margin: 0;
-			padding: 0;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			height: 100vh;
-		}
+            background-size: 50%;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
         #calculator {
             background-color: #fff;
@@ -61,19 +61,85 @@
         #result {
             margin-top: 20px;
             line-height: 1.5;
-			font-size: 18px;
+            font-size: 18px;
         }
 
         #infotext {
             margin-top: 20px;
             line-height: 1.5;
-			display: block;
+            display: block;
         }
-		
+
         #error-message {
             color: red;
             display: none;
             margin-top: 10px;
+        }
+
+        #fuelBarContainer {
+            margin-top: 20px;
+            height: 20px;
+            background-color: #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #fuelBar {
+            height: 100%;
+            background-color: #4CAF50;
+            transition: width 0.5s;
+            position: absolute;
+            width: 0;
+        }
+
+        #fuelBar::before,
+        #fuelBar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 1px;
+            background-color: #000;
+        }
+
+        #fuelBar::before {
+            left: 0;
+        }
+
+        #fuelBar::after {
+            right: 0;
+        }
+
+        #fuelMarkers {
+            display: flex;
+            justify-content: space-between;
+            color: #000;
+            position: absolute;
+            width: calc(100% - 20px);
+            top: 50%;
+            transform: translate(0, -50%);
+            margin: 0 10px;
+        }
+
+        #fuelMarkers span {
+            position: relative;
+            flex: 1;
+            text-align: center;
+        }
+
+        #fuelMarkers span:first-child::before {
+            content: '0';
+            position: absolute;
+            left: 0;
+            transform: translateX(-50%);
+        }
+
+        #fuelMarkers span:last-child::after {
+            content: '1';
+            position: absolute;
+            right: 0;
+            transform: translateX(50%);
         }
     </style>
 </head>
@@ -81,7 +147,7 @@
 
 <div id="calculator">
     <h2>Verso kütusekalkulaator</h2>
-	<p><b>NB!</b> Koma asemel kasuta punkti!</p>
+    <p><b>NB!</b> Koma asemel kasuta punkti!</p>
     <form id="fuelForm">
         <label for="kilometers">Läbitud distants (km):</label>
         <input type="number" id="kilometers" placeholder="Sisesta läbitud km (vajalik sisestada!)">
@@ -91,16 +157,26 @@
 
         <label for="fuelPrice">Kütusehind (€):</label>
         <input type="number" id="fuelPrice" placeholder="Sisesta kütusehind (1.6€/l sisendita)">
-		
-		<label for="litres">Paaki pandud kütus (l):</label>
+
+        <label for="litres">Paaki pandud kütus (l):</label>
         <input type="number" id="litres" placeholder="Sisendita automaatselt 55l (täispaak)">
 
         <button type="button" onclick="calculatePrice()">Arvuta</button>
     </form>
 
-	<div id='error-message'>Kalkulaator töötab küll...<br>kuid palun sisesta vähemalt läbitud distants (ja kütusekulu) ning <b>kasuta koma asemel punkti!</b> Samuti veendu, et poleks üleliigseid tühikuid!</div>
+    <div id='error-message'>Kalkulaator töötab küll...<br>kuid palun sisesta vähemalt läbitud distants (ja kütusekulu) ning <b>kasuta koma asemel punkti!</b> Samuti veendu, et poleks üleliigseid tühikuid!</div>
     <div id='result'></div>
-	<div id='infotext'><p><i>Kui kütuse täpne maksumus ja kütuse jääk paagis ei huvita, siis jäta need väljad lihtsalt tühjaks ning kalkulatsioon tehakse lahtrites hallilt kuvatud sisenditega.</i></p></div>
+
+    <div id='fuelBarContainer'>
+        <div id='fuelBar'></div>
+        <div id='fuelMarkers'>
+            <span></span>
+            <span>1/2</span>
+            <span></span>
+        </div>
+    </div>
+
+    <div id='infotext'><p><i>Kui kütuse täpne maksumus ja kütuse jääk paagis ei huvita, siis jäta need väljad lihtsalt tühjaks ning kalkulatsioon tehakse lahtrites hallilt kuvatud sisenditega.</i></p></div>
 </div>
 
 <script>
@@ -116,19 +192,26 @@
         var litres = parseFloat(litresInput.value) || 55;
 
         if (isNaN(kilometers) || isNaN(fuelPrice) || isNaN(fuelConsumption) || isNaN(litres)) {
-			document.getElementById('error-message').style.display = 'block';
+            document.getElementById('error-message').style.display = 'block';
             return;
         } else {
-			document.getElementById('error-message').style.display = 'none'
-		}
+            document.getElementById('error-message').style.display = 'none'
+        }
 
         var litresSpent = (kilometers / 100) * fuelConsumption;
-		var price = litresSpent * fuelPrice;
-		var fuelLeft = litres - litresSpent;
-		var kilometersLeft = fuelLeft / fuelConsumption * 100;
-		var tahtvereCalculation = kilometersLeft / 12;
-		document.getElementById('result').innerHTML = 'Kütust kulus <b>' + kilometers.toFixed(2) + ' kilomeetri</b> läbimiseks hinnanguliselt <b>' + litresSpent.toFixed(2) + ' liitrit</b>,<br>mille maksumus on <b>' + price.toFixed(2) + '€</b>.<br>Kui paagis oli enne <b>' + litres.toFixed(2) + ' liitrit</b> kütust,<br>siis on nüüd alles <b>' + fuelLeft.toFixed(2) + ' liitrit</b>, millega saab veel sõita <b>' + kilometersLeft.toFixed(2) + ' kilomeetrit</b> <i>(' + fuelConsumption.toFixed(1) + 'l/100km korral)</i>.<br><i>Tähtvere spordiparki saab selle kütusega edasi-tagasi sõita veel <b>' + tahtvereCalculation.toFixed(0) + '</b> korda.</i>';
-		document.getElementById('infotext').style.display = 'none';
+        var price = litresSpent * fuelPrice;
+        var fuelLeft = litres - litresSpent;
+        var kilometersLeft = fuelLeft / fuelConsumption * 100;
+        var tahtvereCalculation = kilometersLeft / 12;
+		
+		var fuelBarWidth = (fuelLeft / 55) * 100;
+
+        document.getElementById('result').innerHTML = 'Kütust kulus <b>' + kilometers.toFixed(2) + ' kilomeetri</b> läbimiseks hinnanguliselt <b>' + litresSpent.toFixed(2) + ' liitrit</b>,<br>mille maksumus on <b>' + price.toFixed(2) + '€</b>.<br>Kui paagis oli enne <b>' + litres.toFixed(2) + ' liitrit</b> kütust,<br>siis on nüüd alles <b>' + fuelLeft.toFixed(2) + ' liitrit</b>, millega saab veel sõita <b>' + kilometersLeft.toFixed(2) + ' kilomeetrit</b> <i>(' + fuelConsumption.toFixed(1) + 'l/100km korral)</i>.<br><b>Paagi täituvus visualiseeritult </b><i>(' + fuelBarWidth.toFixed(1) + '%)</i>:';
+        
+        document.getElementById('fuelBar').style.width = fuelBarWidth + '%';
+
+        document.getElementById('fuelBarContainer').style.display = 'block';
+        document.getElementById('infotext').style.display = 'none';
     }
 </script>
 
